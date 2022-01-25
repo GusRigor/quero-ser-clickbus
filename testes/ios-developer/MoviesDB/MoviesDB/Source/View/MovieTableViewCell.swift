@@ -27,7 +27,7 @@ class MovieTableViewCell: UITableViewCell {
         self.movieYear?.text = releaseDate
         self.movieOverview?.text = overview
         if let rating = rating {
-            self.movieRate?.text =  String(rating/2)
+            self.movieRate?.text =  String(rating)
         }
         
         guard let posterUrl = poster, let posterImageUrl = URL(string: posterUrl) else {

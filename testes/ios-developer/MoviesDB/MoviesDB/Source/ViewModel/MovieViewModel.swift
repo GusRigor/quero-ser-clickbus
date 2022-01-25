@@ -10,14 +10,16 @@ import Foundation
 class MovieViewModel{
     
     private var popularMovies = [Movie]()
+    private var pageNumber = 1
     
     func fetchPopularMoviesData( completion: @escaping () -> ()){
         
         MovieListWorker().fetchMovieList(
-            section: .popular, page: 1,
+            section: .popular, page: pageNumber,
             sucess: { response in
                 guard let movies = response?.results else { return }
-                self.popularMovies = movies
+                self.popularMovies.append(contentsOf: movies)
+                self.pageNumber += 1
                 completion()
             },
             failure: { error in

@@ -54,7 +54,7 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView?.delegate = self
         loadPopularMovieData()
     }
     
@@ -62,11 +62,22 @@ class MovieViewController: UIViewController {
         viewModel.fetchPopularMoviesData { [weak self] in
             self?.tableView?.dataSource = self
             self?.tableView?.reloadData()
+            self?.tableView?.tableFooterView = nil
         }
+    }
+    
+    private func createSpinnerFooter() -> UIView{
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        return footerView
     }
 }
 
-extension MovieViewController: UITableViewDataSource{
+// MARK: TableView
+extension MovieViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsInSection(section: section)
@@ -79,6 +90,18 @@ extension MovieViewController: UITableViewDataSource{
         cell.setCellWithValuesOf(movie)
         
         return cell
+    }
+}
+
+// MARK: ScrollView
+extension MovieViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let position = scrollView.contentOffset.y
+        guard let tablePosition = tableView?.contentSize.height else { return }
+        if position > tablePosition - scrollView.frame.size.height - 100 {
+            self.tableView?.tableFooterView = createSpinnerFooter()
+            loadPopularMovieData()
+        }
     }
 }
 
