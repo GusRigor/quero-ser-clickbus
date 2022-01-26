@@ -91,6 +91,14 @@ extension MovieViewController: UITableViewDataSource, UITableViewDelegate{
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "MovieDetails", bundle: nil)
+        let controller = storyboard.instantiateViewController(identifier: "movieDetails") as! MovieDetailsViewController
+        controller.viewModel.movie = viewModel.cellForRowAt(indexPath: indexPath)
+        self.navigationController?.pushViewController(controller, animated: true)
+        
+    }
 }
 
 // MARK: ScrollView
