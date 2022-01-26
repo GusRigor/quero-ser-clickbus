@@ -11,7 +11,7 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var moviePoster: UIImageView?
     @IBOutlet weak var movieTitle: UILabel?
     @IBOutlet weak var movieYear: UILabel?
-    @IBOutlet weak var movieOverview: UILabel?
+    @IBOutlet weak var movieVotes: UILabel?
     @IBOutlet weak var movieRate: UILabel?
     
     func setCellWithValuesOf(_ movie:Movie){
@@ -19,13 +19,13 @@ class MovieTableViewCell: UITableViewCell {
         if let poster = movie.posterPath{
             posterUrl = MovieAPI.build(image: poster, size: .w300)
         }
-        updateUI(title: movie.title, releaseDate: movie.releaseDate, rating: movie.voteAverage, overview: movie.overview, poster: posterUrl)
+        updateUI(title: movie.title, releaseDate: movie.releaseDate, rating: movie.voteAverage, votes: movie.voteCount, poster: posterUrl)
     }
     
-    private func updateUI(title: String?, releaseDate: String?, rating: Double?, overview: String?, poster: String?){
+    private func updateUI(title: String?, releaseDate: String?, rating: Double?, votes: Int, poster: String?){
         self.movieTitle?.text = title
         self.movieYear?.text = releaseDate
-        self.movieOverview?.text = overview
+        self.movieVotes?.text = "\(votes) votes"
         if let rating = rating {
             self.movieRate?.text =  String(rating)
         }
